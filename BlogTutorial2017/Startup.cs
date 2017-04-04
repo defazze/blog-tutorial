@@ -17,6 +17,8 @@ using BlogTutorial.Identity;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Net;
 
 namespace BlogTutorial2017
 {
@@ -36,8 +38,18 @@ namespace BlogTutorial2017
                 (options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
                     b => b.MigrationsAssembly("BlogTutorial2017")));
 
-            services.AddIdentity<ApplicationUser, Role>()
-                .AddUserStore<ApplicationUserStore>()
+            services.AddIdentity<ApplicationUser, Role>(options =>
+            {
+                options.Cookies.ApplicationCookie.Events =
+                    new CookieAuthenticationEvents
+                    {
+                        OnRedirectToLogin = context =>
+                        {
+                            context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                            return Task.CompletedTask;
+                        }
+                    };
+            }).AddUserStore<ApplicationUserStore>()
                 .AddRoleStore<ApplicationRoleStore>()
                 .AddDefaultTokenProviders();
 
@@ -73,8 +85,7 @@ namespace BlogTutorial2017
             }
 
             app.UseIdentity();
-
-            
+            app.UseCookieAuthentication(new CookieAuthenticationOptions { LoginPath = null });
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

@@ -22,20 +22,28 @@ namespace BlogTutorial2017
 
         public async Task Initialize()
         {
+            await GetOrCreateRole(IdentityConstants.ADMINISTRATOR_ROLE);
+            await GetOrCreateRole(IdentityConstants.USER_ROLE);
+
             if (!_userManager.Users.Any())
             {
-                var adminRole = await _roleManager.FindByNameAsync(IdentityConstants.ADMINISTRATOR_ROLE);
-                if (adminRole == null)
-                {
-                    adminRole = new Role { RoleName = IdentityConstants.ADMINISTRATOR_ROLE };
-                    await _roleManager.CreateAsync(adminRole);
-                }
-
                 var admin = new ApplicationUser { UserName = "admin", Email = "admin@admin.ru", Password= "admin" };
                 await _userManager.CreateAsync(admin);
 
                await _userManager.AddToRoleAsync(admin, IdentityConstants.ADMINISTRATOR_ROLE);
             }
+        }
+
+        private async Task<Role> GetOrCreateRole(string roleName)
+        {
+            var role = await _roleManager.FindByNameAsync(roleName);
+            if (role == null)
+            {
+                role = new Role { RoleName = roleName };
+                await _roleManager.CreateAsync(role);
+            }
+
+            return role;
         }
     }
 }

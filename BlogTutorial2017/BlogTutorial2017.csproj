@@ -18,6 +18,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="1.1.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="1.1.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="1.0.0-preview4-final" />
+    <PackageReference Include="System.ValueTuple" Version="4.3.0-preview1-24530-04" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BlogTutorial.Data\BlogTutorial.Data.csproj" />
