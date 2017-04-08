@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace BlogTutorial.Identity
 {
-    public class ApplicationUserStore : IUserEmailStore<ApplicationUser>, IUserPasswordStore<ApplicationUser>, IUserRoleStore<ApplicationUser>, IQueryableUserStore<ApplicationUser>
+    public class ApplicationUserStore : IUserPasswordStore<ApplicationUser>, IUserRoleStore<ApplicationUser>, IQueryableUserStore<ApplicationUser>
     {
         private readonly BlogDbContext _context;
 
@@ -58,12 +58,6 @@ namespace BlogTutorial.Identity
             
         }
 
-        public async Task<ApplicationUser> FindByEmailAsync(string normalizedEmail, CancellationToken cancellationToken)
-        {
-            var user = await _context.Users.SingleOrDefaultAsync(u => u.Email.ToLower() == normalizedEmail);
-            return user;
-        }
-
         public async Task<ApplicationUser> FindByIdAsync(string userId, CancellationToken cancellationToken)
         {
             var id = Guid.Parse(userId);
@@ -74,28 +68,13 @@ namespace BlogTutorial.Identity
 
         public async Task<ApplicationUser> FindByNameAsync(string normalizedUserName, CancellationToken cancellationToken)
         {
-            var user = await _context.Users.SingleOrDefaultAsync(u => u.UserName.ToLower() == normalizedUserName);
+            var user = await _context.Users.SingleOrDefaultAsync(u => u.UserName.ToUpper() == normalizedUserName);
             return user;
-        }
-
-        public Task<string> GetEmailAsync(ApplicationUser user, CancellationToken cancellationToken)
-        {
-            return Task.FromResult(user.Email);
-        }
-
-        public Task<bool> GetEmailConfirmedAsync(ApplicationUser user, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<string> GetNormalizedEmailAsync(ApplicationUser user, CancellationToken cancellationToken)
-        {
-            return Task.FromResult(user.NormalizedEmail);
         }
 
         public Task<string> GetNormalizedUserNameAsync(ApplicationUser user, CancellationToken cancellationToken)
         {
-            return Task.FromResult(user.NormalizedUserName);
+            return Task.FromResult(user.UserName.ToUpper());
         }
 
         public Task<string> GetPasswordHashAsync(ApplicationUser user, CancellationToken cancellationToken)
@@ -158,22 +137,6 @@ namespace BlogTutorial.Identity
 
             _context.UserRoles.Remove(userRole);
             await _context.SaveChangesAsync();
-        }
-
-        public async Task SetEmailAsync(ApplicationUser user, string email, CancellationToken cancellationToken)
-        {
-            user.Email = email.ToLower();
-            await _context.SaveChangesAsync();
-        }
-
-        public Task SetEmailConfirmedAsync(ApplicationUser user, bool confirmed, CancellationToken cancellationToken)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task SetNormalizedEmailAsync(ApplicationUser user, string normalizedEmail, CancellationToken cancellationToken)
-        {
-            return Task.FromResult(0);
         }
 
         public Task SetNormalizedUserNameAsync(ApplicationUser user, string normalizedName, CancellationToken cancellationToken)

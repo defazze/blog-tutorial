@@ -29,7 +29,7 @@ namespace BlogTutorial2017
             {
                 var admin = new ApplicationUser { UserName = "admin", Email = "admin@admin.ru", Password= "admin" };
                 await _userManager.CreateAsync(admin);
-
+               
                await _userManager.AddToRoleAsync(admin, IdentityConstants.ADMINISTRATOR_ROLE);
             }
         }

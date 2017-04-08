@@ -85,7 +85,7 @@ namespace BlogTutorial2017
             }
 
             app.UseIdentity();
-            app.UseCookieAuthentication(new CookieAuthenticationOptions { LoginPath = null });
+
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
