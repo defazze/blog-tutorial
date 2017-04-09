@@ -40,15 +40,22 @@ namespace BlogTutorial2017
 
             services.AddIdentity<ApplicationUser, Role>(options =>
             {
-                options.Cookies.ApplicationCookie.Events =
-                    new CookieAuthenticationEvents
-                    {
-                        OnRedirectToLogin = context =>
-                        {
-                            context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
-                            return Task.CompletedTask;
-                        }
-                    };
+                {
+                    options.Cookies.ApplicationCookie.Events =
+                          new CookieAuthenticationEvents
+                          {
+                              OnRedirectToLogin = context =>
+                              {
+                                  context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                                  return Task.CompletedTask;
+                              }
+                          };
+                    options.Password.RequireDigit = false;
+                    options.Password.RequiredLength = 6;
+                    options.Password.RequireLowercase = false;
+                    options.Password.RequireNonAlphanumeric = false;
+                    options.Password.RequireUppercase = false;
+                }
             }).AddUserStore<ApplicationUserStore>()
                 .AddRoleStore<ApplicationRoleStore>()
                 .AddDefaultTokenProviders();

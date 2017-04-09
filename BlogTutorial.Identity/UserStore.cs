@@ -33,9 +33,6 @@ namespace BlogTutorial.Identity
 
         public async Task<IdentityResult> CreateAsync(ApplicationUser user, CancellationToken cancellationToken)
         {
-            PasswordHasher<ApplicationUser> hasher = new PasswordHasher<ApplicationUser>();
-            user.PasswordHash = hasher.HashPassword(user, user.Password);
-
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
@@ -146,9 +143,7 @@ namespace BlogTutorial.Identity
 
         public async Task SetPasswordHashAsync(ApplicationUser user, string passwordHash, CancellationToken cancellationToken)
         {
-            var dbUser = await _context.Users.SingleAsync(u => u.UserId == user.UserId);
-            dbUser.PasswordHash = passwordHash;
-
+            user.PasswordHash = passwordHash;
             await _context.SaveChangesAsync();
         }
 

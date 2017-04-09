@@ -39,8 +39,8 @@ namespace BlogTutorial2017.Controllers
         [HttpPost]
         public async Task<IdentityResult> SignUp([FromBody] ApplicationUser user)
         {
-            var result = await _userManager.CreateAsync(user);
-
+            var result = await _userManager.CreateAsync(user, user.Password);
+            
             if (result.Succeeded)
                 await _userManager.AddToRoleAsync(user, IdentityConstants.USER_ROLE);
 
