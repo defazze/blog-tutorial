@@ -75,7 +75,7 @@ namespace BlogTutorial2017
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IServiceScopeFactory scopeFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, IServiceProvider provider)
         {
             loggerFactory.AddConsole();
 
@@ -84,12 +84,9 @@ namespace BlogTutorial2017
                 app.UseDeveloperExceptionPage();
             }
 
-            using (var scope = scopeFactory.CreateScope())
-            {
-                var initializer = scope.ServiceProvider.GetService<DataInitializer>();
-                Action func = async () => await initializer.Initialize();
-                func();
-            }
+            var initializer = provider.GetService<DataInitializer>();
+            Action func = async () => await initializer.Initialize();
+            func();
 
             app.UseIdentity();
 
