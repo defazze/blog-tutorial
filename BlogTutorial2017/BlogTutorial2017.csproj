@@ -21,6 +21,7 @@
     <PackageReference Include="System.ValueTuple" Version="4.3.0-preview1-24530-04" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BlogTutorial.Core\BlogTutorial.Core.csproj" />
     <ProjectReference Include="..\BlogTutorial.Data\BlogTutorial.Data.csproj" />
     <ProjectReference Include="..\BlogTutorial.Identity\BlogTutorial.Identity.csproj" />
   </ItemGroup>

@@ -10,11 +10,10 @@ namespace BlogTutorial.Data.Models
         [Key]
         public Guid UserId { get; set; }
         public string UserName { get; set; }
+
+        [Required]
         public string PasswordHash { get; set; }
         public string Email { get; set; }
-
-        [NotMapped]
-        public string Password { get; set; }
 
         public virtual ICollection<UserRole> UserRoles { get; set; }
     }

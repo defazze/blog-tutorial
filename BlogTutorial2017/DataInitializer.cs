@@ -27,8 +27,8 @@ namespace BlogTutorial2017
 
             if (!_userManager.Users.Any())
             {
-                var admin = new ApplicationUser { UserName = "admin", Email = "admin@admin.ru", Password= "administrator" };
-                await _userManager.CreateAsync(admin, admin.Password);
+                var admin = new ApplicationUser { UserName = "admin", Email = "admin@admin.ru"};
+                await _userManager.CreateAsync(admin, "administrator");
                
                await _userManager.AddToRoleAsync(admin, IdentityConstants.ADMINISTRATOR_ROLE);
             }

@@ -1,4 +1,5 @@
-﻿using BlogTutorial.Data.Constants;
+﻿using BlogTutorial.Core;
+using BlogTutorial.Data.Constants;
 using BlogTutorial.Data.Models;
 using BlogTutorial2017.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -14,12 +15,12 @@ namespace BlogTutorial2017.Controllers
     public class AccountController : Controller
     {
         private SignInManager<ApplicationUser> _signInManager;
-        private UserManager<ApplicationUser> _userManager;
+        private AccountManager _accountManager;
 
-        public AccountController(SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
+        public AccountController(SignInManager<ApplicationUser> signInManager, AccountManager accountManager)
         {
             _signInManager = signInManager;
-            _userManager = userManager;
+            _accountManager = accountManager;
         }
 
         [HttpPost]
@@ -37,12 +38,16 @@ namespace BlogTutorial2017.Controllers
         }
 
         [HttpPost]
-        public async Task<IdentityResult> SignUp([FromBody] ApplicationUser user)
+        [ModelValidationFilter]
+        public async Task<IdentityResult> SignUp([FromBody] RegistrationModel userModel)
         {
-            var result = await _userManager.CreateAsync(user, user.Password);
-            
-            if (result.Succeeded)
-                await _userManager.AddToRoleAsync(user, IdentityConstants.USER_ROLE);
+            var user = new ApplicationUser
+            {
+                UserName = userModel.UserName,
+                Email = userModel.Email
+            };
+
+            var result = await _accountManager.Register(user, userModel.Password);
 
             return result;
         }

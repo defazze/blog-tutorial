@@ -19,6 +19,7 @@ using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Net;
+using BlogTutorial.Core;
 
 namespace BlogTutorial2017
 {
@@ -61,6 +62,7 @@ namespace BlogTutorial2017
                 .AddDefaultTokenProviders();
 
             services.AddSingleton<DataInitializer>();
+            services.AddScoped<AccountManager>();
 
             services.AddMvc();
 
