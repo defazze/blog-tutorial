@@ -16,5 +16,8 @@ namespace BlogTutorial.Data.Models
         public string Email { get; set; }
 
         public virtual ICollection<UserRole> UserRoles { get; set; }
+        public virtual ICollection<Comment> AsCommentator { get; set; }
+        public virtual ICollection<Blog> AsBlogger { get; set; }
+
     }
 }
